@@ -13,3 +13,5 @@ with st.expander("DATA"):
 with st.expander("Visualization"):
     st.scatter_chart(data=df, x='bill_length_mm', y='body_mass_g', color='species')
 
+with st.sidebar:
+  st.header('Inout features: ')
