@@ -74,10 +74,16 @@ with st.expander("Class distribution"):
     st.bar_chart(df['species'].value_counts())
 
 with st.expander("Class distribution"):
-    st.subheader("Correlation Heatmap")
-    fig, ax = plt.subplots()
-    sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='coolwarm', ax=ax)
-    st.pyplot(fig)
+    corr = df.corr(numeric_only=True).stack().reset_index()
+    corr.columns = ["feature1", "feature2", "correlation"]
+    
+    heatmap = alt.Chart(corr).mark_rect().encode(
+        x='feature1:O',
+        y='feature2:O',
+        color='correlation:Q'
+    )
+    
+    st.altair_chart(heatmap, use_container_width=True)
 
 
 
