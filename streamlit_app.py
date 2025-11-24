@@ -215,8 +215,8 @@ with tab_pred:
     c1, c2 = st.columns(2)
 
     with c1:
-    st.metric("Bill Length (mm)", round(bill_length_mm, 2))
-    st.metric("Flipper Length (mm)", round(flipper_length_mm, 2))
+        st.metric("Bill Length (mm)", round(bill_length_mm, 2))
+        st.metric("Flipper Length (mm)", round(flipper_length_mm, 2))
 
     with c2:
         st.metric("Bill Depth (mm)", round(bill_depth_mm, 2))
