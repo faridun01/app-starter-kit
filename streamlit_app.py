@@ -253,29 +253,34 @@ with tab_pred:
     }
 
     # Model selection
-    selected_model_name = st.selectbox(
-        "Choose a model",
-        list(models.keys()),
-        index=list(models.keys()).index(best_model_name),
+selected_model_name = st.selectbox(
+    "Choose a model",
+    list(models.keys()),
+    index=list(models.keys()).index(best_model_name),
+)
+
+selected_model = models[selected_model_name]
+
+if st.button("Predict Penguin Species"):
+    user_df = pd.DataFrame([user_input])
+    pred = selected_model.predict(user_df)[0]
+    proba = selected_model.predict_proba(user_df)[0]
+
+    # Main prediction
+    st.success(f"Predicted species: {pred}")
+
+    # Optional: tabular view
+    proba_df = pd.DataFrame(
+        {"species": selected_model.classes_, "probability": proba}
     )
-
-    selected_model = models[selected_model_name]
-
-    if st.button("Predict Penguin Species"):
-        user_df = pd.DataFrame([user_input])
-        pred = selected_model.predict(user_df)[0]
-        proba = selected_model.predict_proba(user_df)[0]
-
-        st.success(f"Predicted species: {pred}")
-
-        proba_df = pd.DataFrame([proba], columns=selected_model.classes_)
-        st.write("Class probabilities:")
-        st.success(f"Predicted species: {pred}")
 
     st.markdown("---")
     st.subheader("Class Probabilities (Visualization)")
-    
+
+    # Nice metric-style display
     cols = st.columns(len(selected_model.classes_))
     for col, cls, p in zip(cols, selected_model.classes_, proba):
         col.metric(label=cls, value=f"{p*100:.2f}%")
 
+    # If you also want to show the table, uncomment:
+    # st.dataframe(proba_df.style.format({"probability": "{:.2f}"}))
