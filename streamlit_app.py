@@ -5,14 +5,15 @@ import altair as alt
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import VotingClassifier
 from sklearn.metrics import accuracy_score
+
+
 
 # ---------------- PAGE CONFIG -----------------
 st.set_page_config(page_title="Penguins Classifier", page_icon="🐧", layout="wide")
 
-st.title("🐧 Penguins Classifier")
-st.write("Predict the penguin species using **4 numeric features**.")
+st.title("🐧 Penguins Classifier (KNN & Decision Tree)")
+st.write("Predict penguin species using **4 numeric features**.")
 
 
 # ---------------- LOAD DATA -----------------
@@ -22,7 +23,6 @@ def load_data():
         "https://raw.githubusercontent.com/dataprofessor/data/master/penguins_cleaned.csv"
     )
     return df
-
 
 df = load_data()
 
@@ -49,16 +49,9 @@ def train_models(df):
     knn = KNeighborsClassifier(n_neighbors=5)
     dt = DecisionTreeClassifier(max_depth=5, random_state=42)
 
-    # Ensemble Model
-    ensemble = VotingClassifier(
-        estimators=[("knn", knn), ("dt", dt)],
-        voting="hard",
-    )
-
     models = {
         "KNN": knn,
         "Decision Tree": dt,
-        "Ensemble (KNN + DT)": ensemble,
     }
 
     metrics = []
@@ -82,6 +75,7 @@ def train_models(df):
 
 
 models, metrics_df, best_model_name = train_models(df)
+
 
 
 # ---------------- TABS -----------------
@@ -155,7 +149,7 @@ with tab_viz:
 
 # ---------------- TAB 3: MODEL PERFORMANCE -----------------
 with tab_model:
-    st.subheader("Model Accuracy (using only 4 numeric features)")
+    st.subheader("Model Accuracy")
     st.dataframe(metrics_df.style.format({"Accuracy": "{:.3f}"}))
 
     best_row = metrics_df.iloc[0]
@@ -168,7 +162,6 @@ with tab_model:
 with tab_pred:
     st.subheader("Input Features")
 
-    # Sidebar sliders for input
     bill_length_mm = st.slider(
         "Bill length (mm)",
         float(df.bill_length_mm.min()),
@@ -207,7 +200,6 @@ with tab_pred:
     st.write("Your input:")
     st.json(user_input)
 
-    # Model selection
     selected_model_name = st.selectbox(
         "Choose a model",
         list(models.keys()),
@@ -216,7 +208,6 @@ with tab_pred:
 
     selected_model = models[selected_model_name]
 
-    # Prediction button
     if st.button("Predict Penguin Species"):
         user_df = pd.DataFrame([user_input])
         pred = selected_model.predict(user_df)[0]
