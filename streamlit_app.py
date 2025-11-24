@@ -168,31 +168,6 @@ with tab_viz:
         st.write("Gender:")
         st.bar_chart(df["sex"].value_counts())
 
-    # ----------------------------------------------------
-    st.markdown("### Correlation Heatmap (Numeric Features)")
-    # ----------------------------------------------------
-
-    corr = df[numeric_cols].corr()
-
-    corr_long = (
-        corr.stack()
-        .reset_index()
-        .rename(columns={"level_0": "Feature1", "level_1": "Feature2", 0: "Correlation"})
-    )
-
-    heatmap = (
-        alt.Chart(corr_long)
-        .mark_rect()
-        .encode(
-            x=alt.X("Feature1:O", sort=numeric_cols),
-            y=alt.Y("Feature2:O", sort=numeric_cols),
-            color=alt.Color("Correlation:Q", scale=alt.Scale(scheme="blueorange")),
-            tooltip=["Feature1", "Feature2", alt.Tooltip("Correlation:Q", format=".2f")],
-        )
-    )
-
-    st.altair_chart(heatmap, use_container_width=True)
-
 
 # ---------- TAB: MODELS ----------
 with tab_models:
