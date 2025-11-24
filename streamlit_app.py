@@ -243,6 +243,13 @@ elif page == "🔮 Prediction":
 
     st.subheader("Your Input")
 
+    user_input = { 
+        "bill_length_mm": bill_length_mm, 
+        "bill_depth_mm": bill_depth_mm, 
+        "flipper_length_mm": flipper_length_mm, 
+        "body_mass_g": body_mass_g, 
+    }
+
     c1, c2 = st.columns(2)
     
     with c1:
