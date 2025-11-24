@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 st.title('🎈 Hello ;)')
 st.write("Let's do it")
@@ -72,11 +74,10 @@ with st.expander("Class distribution"):
     st.bar_chart(df['species'].value_counts())
 
 with st.expander("Class distribution"):
-    chart = alt.Chart(df).mark_bar().encode(
-        x='species:N',
-        y='count()'
-    )
-    st.altair_chart(chart, use_container_width=True)
+    st.subheader("Correlation Heatmap")
+    fig, ax = plt.subplots()
+    sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='coolwarm', ax=ax)
+    st.pyplot(fig)
 
 
 
