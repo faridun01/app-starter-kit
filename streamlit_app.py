@@ -321,7 +321,7 @@ with tab_pred:
         st.success(f"Predicted species: {pred}")
 
         st.markdown("---")
-        st.subheader("Class Probabilities (1 = predicted, 0 = otherwise)")
+        st.subheader("Class Probabilities")
 
         # Visual class indicator: 1 = predicted class, 0 = others
         cols = st.columns(len(selected_model.classes_))
