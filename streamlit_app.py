@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import altair as alt
 
 st.title('🎈 Hello ;)')
 st.write("Let's do it")
@@ -69,5 +70,13 @@ user_input = {
 with st.expander("Class distribution"):
     st.subheader("Class distribution")
     st.bar_chart(df['species'].value_counts())
+
+with st.expander("Class distribution"):
+    chart = alt.Chart(df).mark_bar().encode(
+        x='species:N',
+        y='count()'
+    )
+    st.altair_chart(chart, use_container_width=True)
+
 
 
