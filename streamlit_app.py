@@ -114,11 +114,11 @@ page = st.session_state.page
 st.title(page)
 
 
-
 # ---------- PAGE: DATA ----------
 if page == "📘 Data":
     st.subheader("Dataset Preview")
     st.dataframe(df)
+
 
 # ---------- PAGE: VISUALIZATION ----------
 elif page == "📊 Visualization":
@@ -175,7 +175,6 @@ elif page == "📊 Visualization":
     with col3:
         st.write("Gender:")
         st.bar_chart(df["sex"].value_counts())
-
 
 
 # ---------- PAGE: MODELS ----------
@@ -241,25 +240,45 @@ elif page == "🔮 Prediction":
         int(df.body_mass_g.mean()),
     )
 
+    # Nice input display
     st.subheader("Your Input")
 
     c1, c2 = st.columns(2)
-    
+
     with c1:
         st.metric("Bill Length (mm)", bill_length_mm)
         st.metric("Flipper Length (mm)", flipper_length_mm)
-    
+
     with c2:
         st.metric("Bill Depth (mm)", bill_depth_mm)
         st.metric("Body Mass (g)", body_mass_g)
 
-    user_input = { 
-        "bill_length_mm": bill_length_mm, 
-        "bill_depth_mm": bill_depth_mm, 
-        "flipper_length_mm": flipper_length_mm, 
-        "body_mass_g": body_mass_g, 
+    user_input = {
+        "bill_length_mm": bill_length_mm,
+        "bill_depth_mm": bill_depth_mm,
+        "flipper_length_mm": flipper_length_mm,
+        "body_mass_g": body_mass_g,
     }
 
+    # Extra: bar chart visualization of input
+    input_vis_df = pd.DataFrame({
+        "Feature": list(user_input.keys()),
+        "Value": list(user_input.values())
+    })
+
+    st.subheader("Your Input (Visualized)")
+    input_chart = (
+        alt.Chart(input_vis_df)
+        .mark_bar()
+        .encode(
+            x="Feature",
+            y="Value",
+            tooltip=["Feature", "Value"],
+        )
+    )
+    st.altair_chart(input_chart, use_container_width=True)
+
+    # Model selection
     selected_model_name = st.selectbox(
         "Choose a model",
         list(models.keys()),
