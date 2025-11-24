@@ -67,4 +67,6 @@ user_input = {
 }
 
 st.subheader("Your Input")
-st.json(user_input)
+st.subheader("Class distribution")
+st.bar_chart(df['species'].value_counts())
+
