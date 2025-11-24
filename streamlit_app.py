@@ -2,26 +2,69 @@ import streamlit as st
 import pandas as pd
 
 st.title('🎈 Hello ;)')
+st.write("Let's do it")
 
-st.write('Let\'s do it')
+# ----------- LOAD DATA -----------
+df = pd.read_csv('https://raw.githubusercontent.com/dataprofessor/data/master/penguins_cleaned.csv')
 
+# ----------- EXPANDER: DATA -----------
 with st.expander("DATA"):
-  st.write('**OUR DATA**')
-  df = pd.read_csv('https://raw.githubusercontent.com/dataprofessor/data/master/penguins_cleaned.csv')
-  df
+    st.write("**OUR DATA**")
+    st.dataframe(df)
 
+# ----------- EXPANDER: VISUALIZATION -----------
 with st.expander("Visualization"):
-    st.scatter_chart(data=df, x='bill_length_mm', y='body_mass_g', color='species')
+    st.scatter_chart(
+        data=df,
+        x='bill_length_mm',
+        y='body_mass_g',
+        color='species'
+    )
 
-with st.sidebar:
-    st.header('Input features')
+# ----------- SIDEBAR INPUTS -----------
+st.sidebar.header("Input features")
 
-    island = st.selectbox("Island", ('Torgersen', 'Dream', 'Biscoe'))
+island = st.sidebar.selectbox("Island", ('Torgersen', 'Dream', 'Biscoe'))
 
-    bill_length_mm = st.slider("Bill length (mm)", 32.1, 59.6, 35.1)
-    bill_depth_mm = st.slider("Bill depth (mm)", 13.1, 21.5, 16.3)
-    flipper_length_mm = st.slider("Flipper length (mm)", 172.0, 231.0, 195.0)
-    body_mass_g = st.slider("Body mass (g)", 2700, 6300, 4200)
+bill_length_mm = st.sidebar.slider(
+    "Bill length (mm)",
+    min_value=float(df.bill_length_mm.min()),
+    max_value=float(df.bill_length_mm.max()),
+    value=float(df.bill_length_mm.mean())
+)
 
-    sex = st.selectbox("Gender", ("male", "female"))
+bill_depth_mm = st.sidebar.slider(
+    "Bill depth (mm)",
+    min_value=float(df.bill_depth_mm.min()),
+    max_value=float(df.bill_depth_mm.max()),
+    value=float(df.bill_depth_mm.mean())
+)
 
+flipper_length_mm = st.sidebar.slider(
+    "Flipper length (mm)",
+    min_value=float(df.flipper_length_mm.min()),
+    max_value=float(df.flipper_length_mm.max()),
+    value=float(df.flipper_length_mm.mean())
+)
+
+body_mass_g = st.sidebar.slider(
+    "Body mass (g)",
+    min_value=int(df.body_mass_g.min()),
+    max_value=int(df.body_mass_g.max()),
+    value=int(df.body_mass_g.mean())
+)
+
+sex = st.sidebar.selectbox("Gender", ("male", "female"))
+
+# ----------- SHOW SIDEBAR INPUT BACK TO USER -----------
+user_input = {
+    "island": island,
+    "bill_length_mm": bill_length_mm,
+    "bill_depth_mm": bill_depth_mm,
+    "flipper_length_mm": flipper_length_mm,
+    "body_mass_g": body_mass_g,
+    "sex": sex
+}
+
+st.subheader("Your Input")
+st.json(user_input)
