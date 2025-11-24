@@ -243,13 +243,6 @@ elif page == "🔮 Prediction":
 
     st.subheader("Your Input")
 
-    user_input = { 
-        "bill_length_mm": bill_length_mm, 
-        "bill_depth_mm": bill_depth_mm, 
-        "flipper_length_mm": flipper_length_mm, 
-        "body_mass_g": body_mass_g, 
-    }
-
     c1, c2 = st.columns(2)
     
     with c1:
@@ -260,7 +253,12 @@ elif page == "🔮 Prediction":
         st.metric("Bill Depth (mm)", bill_depth_mm)
         st.metric("Body Mass (g)", body_mass_g)
 
-
+    user_input = { 
+        "bill_length_mm": bill_length_mm, 
+        "bill_depth_mm": bill_depth_mm, 
+        "flipper_length_mm": flipper_length_mm, 
+        "body_mass_g": body_mass_g, 
+    }
 
     selected_model_name = st.selectbox(
         "Choose a model",
