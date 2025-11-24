@@ -7,15 +7,14 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
 
-# ---------------- PAGE CONFIG -----------------
+# PAGE CONFIG
 st.set_page_config(page_title="Penguins Classifier", page_icon="🐧", layout="wide")
 
-st.header("Hello world :)")
 st.title("🐧 Penguins Classifier")
 st.write("Predict penguin species using 4 numeric features.")
 
 
-# ---------------- LOAD DATA -----------------
+# LOAD DATA 
 @st.cache_data
 def load_data():
     df = pd.read_csv(
@@ -27,7 +26,7 @@ def load_data():
 df = load_data()
 
 
-# ---------------- TRAIN MODELS -----------------
+# TRAIN MODELS
 @st.cache_resource
 def train_models(df):
     feature_cols = [
@@ -79,17 +78,17 @@ def train_models(df):
 
 models, metrics_df, best_model_name, y_test, preds_dict, class_names = train_models(df)
 
-# ---------------- TABS (NO SIDEBAR) -----------------
+# TABS 
 tab_data, tab_viz, tab_models, tab_pred = st.tabs(
     ["📘 Data", "📊 Visualization", "🤖 Models", "🔮 Prediction"]
 )
 
-# ---------- TAB: DATA ----------
+# TAB: DATA
 with tab_data:
     st.subheader("Dataset Preview")
     st.dataframe(df)
 
-# ---------- TAB: VISUALIZATION ----------
+# TAB: VISUALIZATION
 with tab_viz:
 
     st.subheader("Scatter Plot: Bill Length vs Body Mass")
@@ -169,7 +168,7 @@ with tab_viz:
         st.bar_chart(df["sex"].value_counts())
 
 
-# ---------- TAB: MODELS ----------
+# TAB: MODELS
 with tab_models:
     st.subheader("Model Accuracy")
     st.dataframe(metrics_df.style.format({"Accuracy": "{:.3f}"}))
@@ -200,7 +199,7 @@ with tab_models:
     st.dataframe(cm_df)
 
 
-# ---------- TAB: PREDICTION ----------
+# TAB: PREDICTION
 with tab_pred:
     st.subheader("Input Features")
 
@@ -232,7 +231,7 @@ with tab_pred:
         int(df.body_mass_g.mean()),
     )
 
-    # Nice input display
+    # Input display
     st.subheader("Your Input")
 
     c1, c2 = st.columns(2)
