@@ -79,6 +79,10 @@ with st.expander("Class distribution"):
     
     st.altair_chart(box, use_container_width=True)
 
-
+with st.expander("Class distribution"):
+    fig, ax = plt.subplots()
+    ax.hist(df['bill_length_mm'], bins=20, color='skyblue')
+    ax.set_title("Bill Length Distribution")
+    st.pyplot(fig)
 
 
