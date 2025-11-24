@@ -275,7 +275,12 @@ with tab_pred:
         st.markdown("---")
         st.subheader("Class Probabilities (Visualization)")
 
-        # Visual probability display
+        # Visual class indicator: 1 = predicted class, 0 = others
         cols = st.columns(len(selected_model.classes_))
-        for col, cls, p in zip(cols, selected_model.classes_, proba):
-            col.metric(label=cls, value=f"{p}")
+        
+        predicted_class = selected_model.classes_[proba.argmax()]
+        
+        for col, cls in zip(cols, selected_model.classes_):
+            value = 1 if cls == predicted_class else 0
+            col.metric(label=cls, value=value)
+
