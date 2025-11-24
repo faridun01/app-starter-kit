@@ -91,6 +91,7 @@ with tab_data:
 
 # ---------- TAB: VISUALIZATION ----------
 with tab_viz:
+
     st.subheader("Scatter Plot: Bill Length vs Body Mass")
 
     st.scatter_chart(
@@ -100,7 +101,9 @@ with tab_viz:
         color="species",
     )
 
-    st.subheader("Custom Scatter Plot")
+    # ----------------------------------------------------
+    st.markdown("### Custom Scatter Plot")
+    # ----------------------------------------------------
 
     numeric_cols = [
         "bill_length_mm",
@@ -109,8 +112,8 @@ with tab_viz:
         "body_mass_g",
     ]
 
-    x_feat = st.selectbox("X-axis", numeric_cols, index=0)
-    y_feat = st.selectbox("Y-axis", numeric_cols, index=1)
+    x_feat = st.selectbox("X-axis", numeric_cols, index=0, key="x_feat")
+    y_feat = st.selectbox("Y-axis", numeric_cols, index=1, key="y_feat")
 
     chart = (
         alt.Chart(df)
@@ -123,13 +126,33 @@ with tab_viz:
         )
         .interactive()
     )
-
     st.altair_chart(chart, use_container_width=True)
 
-    st.subheader("Summary Statistics")
+    # ----------------------------------------------------
+    st.markdown("### Feature Distribution (Histogram)")
+    # ----------------------------------------------------
+
+    hist_feat = st.selectbox("Select numeric feature:", numeric_cols, key="hist_feat")
+
+    hist_chart = (
+        alt.Chart(df)
+        .mark_bar(opacity=0.8)
+        .encode(
+            x=alt.X(hist_feat, bin=alt.Bin(maxbins=30)),
+            y="count()",
+            tooltip=[hist_feat, "count()"],
+        )
+    )
+    st.altair_chart(hist_chart, use_container_width=True)
+
+    # ----------------------------------------------------
+    st.markdown("### Summary Statistics")
+    # ----------------------------------------------------
     st.dataframe(df.describe())
 
-    st.subheader("Class Distributions")
+    # ----------------------------------------------------
+    st.markdown("### Class Distributions")
+    # ----------------------------------------------------
 
     col1, col2, col3 = st.columns(3)
 
@@ -144,6 +167,31 @@ with tab_viz:
     with col3:
         st.write("Gender:")
         st.bar_chart(df["sex"].value_counts())
+
+    # ----------------------------------------------------
+    st.markdown("### Correlation Heatmap (Numeric Features)")
+    # ----------------------------------------------------
+
+    corr = df[numeric_cols].corr()
+
+    corr_long = (
+        corr.stack()
+        .reset_index()
+        .rename(columns={"level_0": "Feature1", "level_1": "Feature2", 0: "Correlation"})
+    )
+
+    heatmap = (
+        alt.Chart(corr_long)
+        .mark_rect()
+        .encode(
+            x=alt.X("Feature1:O", sort=numeric_cols),
+            y=alt.Y("Feature2:O", sort=numeric_cols),
+            color=alt.Color("Correlation:Q", scale=alt.Scale(scheme="blueorange")),
+            tooltip=["Feature1", "Feature2", alt.Tooltip("Correlation:Q", format=".2f")],
+        )
+    )
+
+    st.altair_chart(heatmap, use_container_width=True)
 
 
 # ---------- TAB: MODELS ----------
