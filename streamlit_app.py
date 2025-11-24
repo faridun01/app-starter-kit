@@ -66,7 +66,7 @@ user_input = {
     "sex": sex
 }
 
-with st.expander("Visualization"):
+with st.expander("Class distribution"):
     st.subheader("Class distribution")
     st.bar_chart(df['species'].value_counts())
 
