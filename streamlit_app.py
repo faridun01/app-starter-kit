@@ -80,14 +80,39 @@ models, metrics_df, best_model_name, y_test, preds_dict, class_names = train_mod
 st.sidebar.title("🐧 Penguins Classifier")
 st.sidebar.write("Predict penguin species using 4 numeric features.")
 
-page = st.sidebar.radio(
-    "Navigation",
-    ["📘 Data", "📊 Visualization", "🤖 Models", "🔮 Prediction"],
-)
+st.sidebar.markdown("---")
 
+# We store the selected page in session_state so it stays active
+if "page" not in st.session_state:
+    st.session_state.page = "📘 Data"   # default page
+
+# Buttons
+if st.sidebar.button("📘 Data"):
+    st.session_state.page = "📘 Data"
+
+st.sidebar.write("")  # spacing
+
+if st.sidebar.button("📊 Visualization"):
+    st.session_state.page = "📊 Visualization"
+
+st.sidebar.write("")  # spacing
+
+if st.sidebar.button("🤖 Models"):
+    st.session_state.page = "🤖 Models"
+
+st.sidebar.write("")  # spacing
+
+if st.sidebar.button("🔮 Prediction"):
+    st.session_state.page = "🔮 Prediction"
+
+st.sidebar.markdown("---")
+
+# Use selected page
+page = st.session_state.page
 
 # ---------------- MAIN AREA -----------------
-st.title(page)  # show current page title on top
+st.title(page)
+
 
 
 # ---------- PAGE: DATA ----------
